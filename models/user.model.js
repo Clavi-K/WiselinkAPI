@@ -16,7 +16,7 @@ class UserModel {
             lastName: { type: String, required: true },
             email: { type: String, required: true, unique: true },
             password: { type: String, required: true },
-            role: { type: String, default: "CLIENT" }
+            role: { type: String, enum:["CLIENT", "ADMIN"], default: "CLIENT" }
         })
 
         this.model = model("User", schema)
@@ -27,7 +27,6 @@ class UserModel {
 
     async create(user) {
         user.password = await bcrypt.hash(user.password, await bcrypt.genSalt(12))
-
         return await this.model.create(user)
     }
 
