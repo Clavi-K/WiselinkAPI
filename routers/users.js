@@ -13,7 +13,8 @@ const router = Router()
 
 /* ----- ROUTES ----- */
 
-router.post("/", controller.post)
+router.post("/register", controller.register)
+router.post("/login", controller.login)
 
 /* ---------- */
 

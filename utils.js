@@ -4,5 +4,7 @@ exports.stringFieldValidation = input => {
 
 exports.dateValidation = input => {
     if (input.split(" ").length !== 2) return false
+    if(new Date(input) == "Invalid Date") return false
+    
     return true
 }
