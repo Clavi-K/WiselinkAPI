@@ -11,6 +11,9 @@ module.exports = {
     post: async (req, res) => {
 
         const event = req.body
+        const userId = req.user.id
+        
+        event.organizer = userId
 
         try {
 
@@ -25,9 +28,11 @@ module.exports = {
 
     get: async (req, res) => {
 
+        const {role} = req.user
+
         try {
 
-            const events = await service.getAll()
+            const events = await service.getAll(role)
             return res.status(200).send(events)
 
         } catch (e) {

@@ -3,7 +3,7 @@
 module.exports = (req,res,next) => {
 
     if(!req.user) return res.status(403).send({error: "Access denied"})
-    if(req.user.role !== "ADMIN") return req.status(403).send({error: "Access denied, admin role required"})
+    if(req.user.role !== "ADMIN") return res.status(403).send({error: "Access denied, admin role required"})
 
     next()
 

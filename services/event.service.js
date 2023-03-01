@@ -17,7 +17,6 @@ module.exports = {
         if (!event.longDescription || !stringFieldValidation(event.longDescription)) throw new Error("Missing or invalid event long description!")
         if (!event.address || !stringFieldValidation(event.address)) throw new Error("Missing or invalid event address!")
         if (!event.status || (event.status !== "PUBLISHED" && event.status !== "DRAFT")) throw new Error("Missing or invalid event status!")
-        if (!event.organizer || !stringFieldValidation(event.organizer)) throw new Error("Missing or invalid event organizer ID!")
         if (!event.dateTime || !stringFieldValidation(event.dateTime) || !dateValidation(event.dateTime) || new Date(event.dateTime) == "Invalid Date") throw new Error("Missing or invalid event date time!")
 
         try {
@@ -37,11 +36,12 @@ module.exports = {
 
     },
 
-    getAll: async () => {
+    getAll: async (userRole) => {
 
         try {
 
-            return await eventModel.getAll()
+            const events = await eventModel.getAll()
+            return userRole === "ADMIN" ? events : events.filter(e => e.status == "PUBLISHED")
 
         } catch (e) {
             throw new Error(e)
@@ -50,9 +50,14 @@ module.exports = {
     },
 
     update: async (eventId, newEvent) => {
-
         if (!eventId || !stringFieldValidation(eventId)) throw new Error("Missing or invalid event ID!")
-        if (!newEvent) throw new Error("Missing event object!")
+
+        if (newEvent.title != undefined && !stringFieldValidation(newEvent.title)) throw new Error("Missing or invalid event title!")
+        if (newEvent.shortDescription != undefined && (!stringFieldValidation(newEvent.shortDescription) || newEvent.shortDescription.length > 100)) throw new Error("Missing or invalid event short description!")
+        if (newEvent.longDescription != undefined && !stringFieldValidation(newEvent.longDescription)) throw new Error("Missing or invalid event long description!")
+        if (newEvent.address != undefined && !stringFieldValidation(newEvent.address)) throw new Error("Missing or invalid event address!")
+        if (newEvent.status != undefined && (newEvent.status !== "PUBLISHED" && newEvent.status !== "DRAFT")) throw new Error("Missing or invalid event status!")
+        if (newEvent.dateTime != undefined && (!stringFieldValidation(newEvent.dateTime) || !dateValidation(newEvent.dateTime))) throw new Error("Missing or invalid event date time!")
 
         try {
 

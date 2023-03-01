@@ -12,7 +12,7 @@ const jwt = require("jsonwebtoken")
 
 module.exports = {
 
-    post: async (user) => {
+    register: async (user) => {
 
         if (!user.firstName || !stringFieldValidation(user.firstName)) throw new Error("Missing or invalid user first name!")
         if (!user.lastName || !stringFieldValidation(user.lastName)) throw new Error("Missing or invalid user last name!")
@@ -23,6 +23,7 @@ module.exports = {
 
             const createdUser = await userModel.create(user)
             const resultUser = {
+                id: createdUser.id,
                 firstName: createdUser.firstName,
                 lastName: createdUser.lastName,
                 email: createdUser.email,
@@ -44,7 +45,7 @@ module.exports = {
         if (!password || !passwordValidation(password)) throw new Error("Missing or invalid password!")
 
         try {
-
+            
             const validation = await userModel.isPasswordValid(email, password)
 
             if (!validation) {
@@ -53,6 +54,7 @@ module.exports = {
 
                 const returnedUser = await userModel.getByEmail(email)
                 const user = {
+                    id: returnedUser.id,
                     firstName: returnedUser.firstName,
                     lastName: returnedUser.lastName,
                     email: returnedUser.email,
@@ -65,6 +67,7 @@ module.exports = {
             }
 
         } catch (e) {
+            console.log(e)
             throw new Error(e)
         }
 
@@ -86,7 +89,7 @@ function passwordValidation(input) {
 }
 
 function generateAcessToken(user) {
-    return jwt.sign(user, config.auth.secret, { expiresIn: "24h" })
+    return jwt.sign(user, config.auth.SECRET, { expiresIn: "24h" })
 }
 
 /* ---------- */
