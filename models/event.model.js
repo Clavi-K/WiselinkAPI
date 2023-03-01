@@ -30,8 +30,20 @@ class EventModel {
         return await this.model.create(event)
     }
 
+    async getAll() {
+        try {
+            return await this.model.find({})
+        } catch (e) {
+            return undefined
+        }
+    }
+
     async getById(eventId) {
-        return await this.model.findById(eventId)
+        try {
+            return await this.model.findById(eventId)
+        } catch (e) {
+            return undefined
+        }
     }
 
     async getActive() {
@@ -39,9 +51,14 @@ class EventModel {
         return events.filter(e => e.dateTime > Date.now())
     }
 
-    async getActive() {
+    async getPast() {
         const events = await this.model.find({ status: "PUBLISHED" })
         return events.filter(e => e.dateTime < Date.now())
+    }
+
+    async update(eventId, newEvent) {
+        const updated =  await this.model.findOneAndUpdate({ _id: eventId }, newEvent, { new: true, upsert: false })
+        return updated
     }
 
     /* ---------- */

@@ -16,7 +16,7 @@ class UserModel {
             lastName: { type: String, required: true },
             email: { type: String, required: true, unique: true },
             password: { type: String, required: true },
-            role: { type: String, enum:["CLIENT", "ADMIN"], default: "CLIENT" }
+            role: { type: String, enum: ["CLIENT", "ADMIN"], default: "CLIENT" }
         })
 
         this.model = model("User", schema)
@@ -31,11 +31,21 @@ class UserModel {
     }
 
     async getById(userId) {
-        return await this.model.findById(userId)
+        try {
+            return await this.model.findById(userId)
+
+        } catch (e) {
+            return undefined
+        }
     }
 
     async getByEmail(email) {
-        return await this.model.find({ email })
+        try {
+            return await this.model.find({ email })
+
+        } catch(e) {
+            return undefined
+        }
     }
 
     async setRole(userId, role) {

@@ -14,6 +14,8 @@ const router = Router()
 /* ----- ROUTES ----- */
 
 router.post("/", controller.post)
+router.get("/", controller.get)
+router.put("/", controller.update)
 
 /* ---------- */
 
