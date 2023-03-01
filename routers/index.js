@@ -1,20 +1,42 @@
 /* ----- REQUIRED IMPORTS ----- */
 
-const express = require("express")
+const { Router } = require("express")
+const fs = require("fs")
 
 /* ---------- */
 
-/* ----- ROUTER ----- */
+/* ----- VARIABLES ----- */
 
-const router = express.Router()
-
-/* ---------- */
-
-/* ----- SUBROUTERS ----- */
+const router = Router()
+const pathRouter = `${__dirname}`
 
 /* ---------- */
 
-/* ------ MODULE EXPORT ------ */
+/* ----- ROUTERS IMPLEMENTATION ----- */
+
+const cleanFileName = (fileName) => {
+    const file = fileName.split(".").shift();
+    return file;
+};
+
+fs.readdirSync(pathRouter).filter((file) => {
+    const cleanName = cleanFileName(file);
+    const filesSkipped = ["index", "public"].includes(cleanName);
+    if (!filesSkipped) {
+        router.use(`/${cleanName}`, require(`./${cleanName}`));
+    }
+});
+
+router.get("*", (req, res) => {
+    res.status(404);
+    res.send({
+        error: "Not eFound",
+    });
+});
+
+/* ---------- */
+
+/* ----- ROUTER EXPORT ----- */
 
 module.exports = router
 
