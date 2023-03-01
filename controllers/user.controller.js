@@ -22,6 +22,21 @@ module.exports = {
         }
 
 
+    },
+
+    login: async(req,res) => {
+
+        const {email, password } = req.body
+
+        try {
+
+            const result = await service.login(email, password)
+            return res.status(200).send((result))
+
+        } catch(e) {
+            return res.status(500).send({ error: e.message || e })
+        }
+
     }
 
 }

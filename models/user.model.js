@@ -43,7 +43,7 @@ class UserModel {
         try {
             return await this.model.find({ email })
 
-        } catch(e) {
+        } catch (e) {
             return undefined
         }
     }
@@ -57,6 +57,11 @@ class UserModel {
     async isAdmin(userId) {
         const user = await this.model.findById(userId)
         return user.role === "ADMIN"
+    }
+
+    async isPasswordValid(email, password) {
+        const user = await this.model.find({ email })
+        return await bcrypt.compare(password, user.password)
     }
 
     /* ---------- */

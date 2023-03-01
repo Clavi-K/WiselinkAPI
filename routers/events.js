@@ -1,6 +1,9 @@
 /* ----- REQUIRED IMPORTS ----- */
 
 const controller = require("../controllers/event.controller")
+const auth = require("../auth/auth")
+const adminAuth = require("../auth/adminAuth")
+
 const { Router } = require("express")
 
 /* ---------- */
@@ -13,9 +16,9 @@ const router = Router()
 
 /* ----- ROUTES ----- */
 
-router.post("/", controller.post)
+router.post("/", auth, adminAuth, controller.post)
 router.get("/", controller.get)
-router.put("/", controller.update)
+router.put("/", auth, adminAuth, controller.update)
 
 /* ---------- */
 

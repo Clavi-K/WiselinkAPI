@@ -10,6 +10,10 @@ module.exports = {
         DATABASE: process.env.ATLASDATABASE,
         OPTIONS: process.env.ATLASOPTIONS,
         HOSTNAME: process.env.ATLASHOSTNAME
+    },
+
+    auth: {
+        SECRET: process.env.AUTHSECRET
     }
 
 }

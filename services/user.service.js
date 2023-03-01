@@ -2,6 +2,9 @@
 
 const userModel = require("../models/user.model")
 const { stringFieldValidation } = require("../utils")
+const config = require("../config/config")
+
+const jwt = require("jsonwebtoken")
 
 /* ---------- */
 
@@ -19,11 +22,46 @@ module.exports = {
         try {
 
             const createdUser = await userModel.create(user)
-            return {
+            const resultUser = {
                 firstName: createdUser.firstName,
                 lastName: createdUser.lastName,
                 email: createdUser.email,
                 role: createdUser.role
+            }
+            const accessToken = generateAcessToken(resultUser)
+            
+            return { user: resultUser, accessToken }
+
+        } catch (e) {
+            throw new Error(e)
+        }
+
+    },
+
+    login: async (email, password) => {
+
+        if (!email || !stringFieldValidation(email)) throw new Error("Missing or invalid email!")
+        if (!password || !passwordValidation(password)) throw new Error("Missing or invalid password!")
+
+        try {
+
+            const validation = await userModel.isPasswordValid(email, password)
+
+            if (!validation) {
+                throw new Error("Invalid email or password!")
+            } else {
+
+                const returnedUser = await userModel.getByEmail(email)
+                const user = {
+                    firstName: returnedUser.firstName,
+                    lastName: returnedUser.lastName,
+                    email: returnedUser.email,
+                    role: returnedUser.role
+                }
+                const accessToken = generateAcessToken(user)
+
+                return { user, accessToken }
+
             }
 
         } catch (e) {
@@ -45,6 +83,10 @@ function emailValidaiton(email) {
 function passwordValidation(input) {
     // password must contain 1 number, 1 special character and at least 6 characters and max of 16
     return stringFieldValidation(input) && input.match(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/) != null
+}
+
+function generateAcessToken(user) {
+    return jwt.sign(user, config.auth.secret, { expiresIn: "24h" })
 }
 
 /* ---------- */

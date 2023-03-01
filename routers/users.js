@@ -14,6 +14,7 @@ const router = Router()
 /* ----- ROUTES ----- */
 
 router.post("/", controller.post)
+router.post("/login", controller.login)
 
 /* ---------- */
 
