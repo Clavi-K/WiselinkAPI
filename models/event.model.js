@@ -31,11 +31,7 @@ class EventModel {
     }
 
     async getAll() {
-        try {
-            return await this.model.find({})
-        } catch (e) {
-            return undefined
-        }
+        return await this.model.find({})
     }
 
     async getById(eventId) {
@@ -57,7 +53,7 @@ class EventModel {
     }
 
     async update(eventId, newEvent) {
-        const updated =  await this.model.findOneAndUpdate({ _id: eventId }, newEvent, { new: true, upsert: false })
+        const updated = await this.model.findOneAndUpdate({ _id: eventId }, newEvent, { new: true, upsert: false })
         return updated
     }
 

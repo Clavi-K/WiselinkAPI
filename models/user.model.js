@@ -16,7 +16,8 @@ class UserModel {
             lastName: { type: String, required: true },
             email: { type: String, required: true, unique: true },
             password: { type: String, required: true },
-            role: { type: String, enum: ["CLIENT", "ADMIN"], default: "CLIENT" }
+            role: { type: String, enum: ["CLIENT", "ADMIN"], default: "CLIENT" },
+            events: { type: [Schema.Types.ObjectId], ref: "Event", default: [] }
         })
 
         this.model = model("User", schema)
@@ -33,7 +34,6 @@ class UserModel {
     async getById(userId) {
         try {
             return await this.model.findById(userId)
-
         } catch (e) {
             return undefined
         }
@@ -42,7 +42,6 @@ class UserModel {
     async getByEmail(email) {
         try {
             return await this.model.findOne({ email })
-
         } catch (e) {
             return undefined
         }

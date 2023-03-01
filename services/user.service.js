@@ -5,6 +5,7 @@ const { stringFieldValidation } = require("../utils")
 const config = require("../config/config")
 
 const jwt = require("jsonwebtoken")
+const eventModel = require("../models/event.model")
 
 /* ---------- */
 
@@ -30,7 +31,7 @@ module.exports = {
                 role: createdUser.role
             }
             const accessToken = generateAcessToken(resultUser)
-            
+
             return { user: resultUser, accessToken }
 
         } catch (e) {
@@ -45,7 +46,7 @@ module.exports = {
         if (!password || !passwordValidation(password)) throw new Error("Missing or invalid password!")
 
         try {
-            
+
             const validation = await userModel.isPasswordValid(email, password)
 
             if (!validation) {
@@ -68,6 +69,32 @@ module.exports = {
 
         } catch (e) {
             console.log(e)
+            throw new Error(e)
+        }
+
+    },
+
+    addEvent: async (userId, eventId) => {
+
+        if (!userId || !stringFieldValidation(userId)) throw new Error("Missing or invalid user ID!")
+        if (!eventId || !stringFieldValidation(eventId)) throw new Error("Missing or invalid user ID!")
+
+        try {
+
+            const user = await userModel.getById(userId)
+            if (!user) throw new Error("There is no user with that ID!")
+
+            const event = await eventModel.getById(eventId)
+            if (!event) throw new Error("There is no evetn with that ID!")
+            if (event.status === "DRAFT") throw new Error("You can't assist to a draft event!")
+
+            if (event.dateTime < Date.now()) throw new Error("You can't assist to an event that has already happened!")
+            if (user.events.contains(eventId)) throw new Error("You are already enroled in this event!")
+
+            user.events.push(eventId)
+            await user.save()
+
+        } catch (e) {
             throw new Error(e)
         }
 
