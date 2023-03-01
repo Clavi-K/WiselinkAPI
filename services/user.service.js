@@ -1,6 +1,7 @@
 /* ----- REQUIRED IMPORTS ----- */
 
 const userModel = require("../models/user.model")
+const { stringFieldValidation } = require("../utils")
 
 /* ---------- */
 
@@ -36,10 +37,6 @@ module.exports = {
 /* ---------- */
 
 /* ----- LOCAL FUNCTIONS ----- */
-
-function stringFieldValidation(input) {
-    return typeof input === "string" && input.trim() !== ""
-}
 
 function emailValidaiton(email) {
     return stringFieldValidation(email) && email.match(/^[^ ]+@[^ ]+\.[a-z]{2,3}$/) != null
