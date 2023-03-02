@@ -60,11 +60,27 @@ module.exports = {
     getByUser: async (req, res) => {
 
         const { id } = req.user
-        const {status} = req.params
+        const { status } = req.params
 
         try {
 
             const events = await userService.getUserEvents(id, status)
+            return res.status(200).send(events)
+
+        } catch (e) {
+            return res.status(500).send({ error: e.message || e })
+        }
+
+    },
+
+    eventFilter: async (req, res) => {
+
+        const filter = req.body
+        const { role } = req.user
+
+        try {
+
+            const events = await service.eventFilter(role, filter)
             return res.status(200).send(events)
 
         } catch (e) {

@@ -68,6 +68,40 @@ module.exports = {
             throw new Error(e)
         }
 
+    },
+
+    eventFilter: async (role, filter) => {
+
+        try {
+
+            let events = await eventModel.getAll()
+
+            if (role === "CLIENT") {
+                events = events.filter(e => e.status === "PUBLISHED")
+            }
+
+            if (filter.after != undefined && stringFieldValidation(filter.after) && dateValidation(filter.after)) {
+                events = events.filter(e => e.dateTime > new Date(filter.after))
+            }
+
+            if (filter.before != undefined && stringFieldValidation(filter.before) && dateValidation(filter.before)) {
+                events = events.filter(e => e.dateTime < new Date(filter.before))
+            }
+
+            if (filter.status != undefined && stringFieldValidation(filter.status) && (filter.status === "DRAFT" || filter.status === "PUBLISHED")) {
+                events = events.filter(e => e.status === filter.status)
+            }
+
+            if (filter.title != undefined && stringFieldValidation(filter.title)) {
+                events = events.filter(e => e.title.includes(filter.title))
+            }
+
+            return events
+
+        } catch (e) {
+            throw new Error(e)
+        }
+
     }
 
 }
