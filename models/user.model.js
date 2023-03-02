@@ -63,6 +63,15 @@ class UserModel {
         return await bcrypt.compare(password, user.password)
     }
 
+    async getUserEvents(userId) {
+        try {
+            const user = await this.model.findById(userId).populate("events")
+            return user.events
+        } catch(e) {
+            return undefined
+        }
+    }
+
     /* ---------- */
 
 }

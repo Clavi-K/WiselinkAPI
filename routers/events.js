@@ -17,8 +17,11 @@ const router = Router()
 /* ----- ROUTES ----- */
 
 router.post("/", auth, adminAuth, controller.post)
-router.get("/", auth, controller.get)
+
 router.put("/", auth, adminAuth, controller.update)
+
+router.get("/", auth, controller.get) 
+router.get("/getByUser/:status", auth, controller.getByUser)
 
 /* ---------- */
 

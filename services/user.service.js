@@ -89,10 +89,30 @@ module.exports = {
             if (event.status === "DRAFT") throw new Error("You can't assist to a draft event!")
 
             if (event.dateTime < Date.now()) throw new Error("You can't assist to an event that has already happened!")
-            if (user.events.contains(eventId)) throw new Error("You are already enroled in this event!")
+            if (user.events.includes(eventId)) throw new Error("You are already enroled in this event!")
 
             user.events.push(eventId)
             await user.save()
+
+        } catch (e) {
+            throw new Error(e)
+        }
+
+    },
+
+    getUserEvents: async (userId, status) => {
+
+        if (!userId || !stringFieldValidation(userId)) throw new Error("Missing or invalid user ID!")
+
+        try {
+
+            const userEvents = await userModel.getUserEvents(userId)
+            if (!userEvents) throw new Error("There is no user with that ID!")
+
+            if(status === "active") return userEvents.filter(e => e.dateTime > Date.now()) 
+            if(status === "past") return userEvents.filter(e => e.dateTime < Date.now()) 
+
+            return userEvents
 
         } catch (e) {
             throw new Error(e)
