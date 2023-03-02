@@ -17,6 +17,7 @@ const router = Router()
 /* ----- ROUTES ----- */
 
 router.post("/", auth, adminAuth, controller.post)
+router.post("/eventFilter", auth, controller.eventFilter)
 
 router.put("/", auth, adminAuth, controller.update)
 
