@@ -16,7 +16,8 @@ class UserModel {
             lastName: { type: String, required: true },
             email: { type: String, required: true, unique: true },
             password: { type: String, required: true },
-            role: { type: String, enum: ["CLIENT", "ADMIN"], default: "CLIENT" }
+            role: { type: String, enum: ["CLIENT", "ADMIN"], default: "CLIENT" },
+            events: { type: [Schema.Types.ObjectId], ref: "Event", default: [] }
         })
 
         this.model = model("User", schema)
@@ -33,7 +34,6 @@ class UserModel {
     async getById(userId) {
         try {
             return await this.model.findById(userId)
-
         } catch (e) {
             return undefined
         }
@@ -42,7 +42,6 @@ class UserModel {
     async getByEmail(email) {
         try {
             return await this.model.findOne({ email })
-
         } catch (e) {
             return undefined
         }
@@ -62,6 +61,15 @@ class UserModel {
     async isPasswordValid(email, password) {
         const user = await this.model.findOne({ email })
         return await bcrypt.compare(password, user.password)
+    }
+
+    async getUserEvents(userId) {
+        try {
+            const user = await this.model.findById(userId).populate("events")
+            return user.events
+        } catch(e) {
+            return undefined
+        }
     }
 
     /* ---------- */

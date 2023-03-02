@@ -1,6 +1,7 @@
 /* ----- REQUIRED IMPORTS ----- */
 
 const service = require("../services/event.service")
+const userService = require("../services/user.service")
 
 /* ---------- */
 
@@ -12,7 +13,7 @@ module.exports = {
 
         const event = req.body
         const userId = req.user.id
-        
+
         event.organizer = userId
 
         try {
@@ -28,7 +29,7 @@ module.exports = {
 
     get: async (req, res) => {
 
-        const {role} = req.user
+        const { role } = req.user
 
         try {
 
@@ -49,6 +50,22 @@ module.exports = {
 
             const updatedEvent = await service.update(eventId, newEvent)
             return res.status(200).send(updatedEvent)
+
+        } catch (e) {
+            return res.status(500).send({ error: e.message || e })
+        }
+
+    },
+
+    getByUser: async (req, res) => {
+
+        const { id } = req.user
+        const {status} = req.params
+
+        try {
+
+            const events = await userService.getUserEvents(id, status)
+            return res.status(200).send(events)
 
         } catch (e) {
             return res.status(500).send({ error: e.message || e })
