@@ -12,9 +12,6 @@ module.exports = {
     post: async (req, res) => {
 
         const event = req.body
-        const userId = req.user.id
-
-        event.organizer = userId
 
         try {
 

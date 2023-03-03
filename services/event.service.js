@@ -16,15 +16,11 @@ module.exports = {
         if (!event.shortDescription || !stringFieldValidation(event.shortDescription) || event.shortDescription.length > 100) throw new Error("Missing or invalid event short description!")
         if (!event.longDescription || !stringFieldValidation(event.longDescription)) throw new Error("Missing or invalid event long description!")
         if (!event.address || !stringFieldValidation(event.address)) throw new Error("Missing or invalid event address!")
+        if (!event.organizer || !stringFieldValidation(event.organizer)) throw new Error("Missing or invalid event organizer!")
         if (!event.status || (event.status !== "PUBLISHED" && event.status !== "DRAFT")) throw new Error("Missing or invalid event status!")
         if (!event.dateTime || !stringFieldValidation(event.dateTime) || !dateValidation(event.dateTime) || new Date(event.dateTime) == "Invalid Date") throw new Error("Missing or invalid event date time!")
 
         try {
-
-            const user = await userModel.getById(event.organizer)
-
-            if (!user) throw new Error("There is no user with that ID!")
-            if (user.role !== "ADMIN") throw new Error("This user is not allowed to create an event!")
 
             event.dateTime = new Date(event.dateTime)
 
@@ -56,6 +52,7 @@ module.exports = {
         if (newEvent.shortDescription != undefined && (!stringFieldValidation(newEvent.shortDescription) || newEvent.shortDescription.length > 100)) throw new Error("Missing or invalid event short description!")
         if (newEvent.longDescription != undefined && !stringFieldValidation(newEvent.longDescription)) throw new Error("Missing or invalid event long description!")
         if (newEvent.address != undefined && !stringFieldValidation(newEvent.address)) throw new Error("Missing or invalid event address!")
+        if (newEvent.organizer != undefined && !stringFieldValidation(newEvent.organizer)) throw new Error("Missing or invalid event organizer!")
         if (newEvent.status != undefined && (newEvent.status !== "PUBLISHED" && newEvent.status !== "DRAFT")) throw new Error("Missing or invalid event status!")
         if (newEvent.dateTime != undefined && (!stringFieldValidation(newEvent.dateTime) || !dateValidation(newEvent.dateTime))) throw new Error("Missing or invalid event date time!")
 
