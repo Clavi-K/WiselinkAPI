@@ -17,7 +17,7 @@ class EventModel {
             dateTime: { type: Date, required: true },
             address: { type: String, required: true },
             status: { type: String, enum: ["DRAFT", "PUBLISHED"], required: true },
-            organizer: { type: Schema.Types.ObjectId, ref: "User", required: true }
+            organizer: { type: String, required: true }
         })
 
         this.model = model("Event", schema)
