@@ -8,6 +8,7 @@ require("dotenv").config({ path: ".env" })
 
 const express = require("express")
 const mongoose = require("mongoose")
+const cors = require("cors")
 
 const config = require("./config/config")
 const routers = require("./routers")
@@ -37,6 +38,18 @@ mongoose.connect(
 
         app.use(express.json())
         app.use(express.urlencoded({ extended: true }))
+
+        /* ---------- */
+
+        /* ----- CORS ----- */
+
+        app.use(
+            cors({
+                origin: ["http://localhost:3000"],
+                credentials: true,
+                methods: "GET,POST,PUT,DELETE",
+            })
+        );
 
         /* ---------- */
 
