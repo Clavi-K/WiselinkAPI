@@ -32,7 +32,7 @@ module.exports = {
             }
             const accessToken = generateAcessToken(resultUser)
 
-            return { user: resultUser, accessToken }
+            return accessToken
 
         } catch (e) {
             throw new Error(e)
@@ -63,7 +63,7 @@ module.exports = {
                 }
                 const accessToken = generateAcessToken(user)
 
-                return { user, accessToken }
+                return accessToken
 
             }
 
@@ -109,8 +109,8 @@ module.exports = {
             const userEvents = await userModel.getUserEvents(userId)
             if (!userEvents) throw new Error("There is no user with that ID!")
 
-            if(status === "active") return userEvents.filter(e => e.dateTime > Date.now()) 
-            if(status === "past") return userEvents.filter(e => e.dateTime < Date.now()) 
+            if (status === "active") return userEvents.filter(e => e.dateTime > Date.now())
+            if (status === "past") return userEvents.filter(e => e.dateTime < Date.now())
 
             return userEvents
 
