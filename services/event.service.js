@@ -55,15 +55,16 @@ module.exports = {
         if (newEvent.organizer != undefined && !stringFieldValidation(newEvent.organizer)) throw new Error("Missing or invalid event organizer!")
         if (newEvent.status != undefined && (newEvent.status !== "PUBLISHED" && newEvent.status !== "DRAFT")) throw new Error("Missing or invalid event status!")
         if (newEvent.dateTime != undefined && (!stringFieldValidation(newEvent.dateTime) || !dateValidation(newEvent.dateTime))) throw new Error("Missing or invalid event date time!")
+        if (newEvent.deleted != undefined && typeof newEvent.deleted !== "boolean") throw new Error("Missing or invalid deleted checkbox!")
 
-        try {
+            try {
 
-            const updatedEvent = await eventModel.update(eventId, newEvent)
-            return updatedEvent
+                const updatedEvent = await eventModel.update(eventId, newEvent)
+                return updatedEvent
 
-        } catch (e) {
-            throw new Error(e)
-        }
+            } catch (e) {
+                throw new Error(e)
+            }
 
     },
 
@@ -103,13 +104,13 @@ module.exports = {
 
     deleteEvent: async (eventId) => {
 
-        if(!eventId || !stringFieldValidation(eventId)) throw new Error("Missing or invalid event ID!")
+        if (!eventId || !stringFieldValidation(eventId)) throw new Error("Missing or invalid event ID!")
 
         try {
 
             await eventModel.delete(eventId)
 
-        } catch(e) {
+        } catch (e) {
             throw new Error(e)
         }
 
