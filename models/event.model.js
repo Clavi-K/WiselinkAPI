@@ -17,7 +17,8 @@ class EventModel {
             dateTime: { type: Date, required: true },
             address: { type: String, required: true },
             status: { type: String, enum: ["DRAFT", "PUBLISHED"], required: true },
-            organizer: { type: String, required: true }
+            organizer: { type: String, required: true },
+            deleted: { type: Boolean, default: false }
         })
 
         this.model = model("Event", schema)
@@ -43,18 +44,22 @@ class EventModel {
     }
 
     async getActive() {
-        const events = await this.model.find({ status: "PUBLISHED" })
+        const events = await this.model.find({ status: "PUBLISHED", deleted: false })
         return events.filter(e => e.dateTime > Date.now())
     }
 
     async getPast() {
-        const events = await this.model.find({ status: "PUBLISHED" })
+        const events = await this.model.find({ status: "PUBLISHED", deleted: false })
         return events.filter(e => e.dateTime < Date.now())
     }
 
     async update(eventId, newEvent) {
         const updated = await this.model.findOneAndUpdate({ _id: eventId }, newEvent, { new: true, upsert: false })
         return updated
+    }
+
+    async delete(eventId) {
+        return await this.model.updateOne({ _id: eventId }, { deleted: true }, { new: true, upsert: false })
     }
 
     /* ---------- */

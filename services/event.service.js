@@ -37,7 +37,7 @@ module.exports = {
         try {
 
             const events = await eventModel.getAll()
-            return userRole === "ADMIN" ? events : events.filter(e => e.status == "PUBLISHED")
+            return userRole === "ADMIN" ? events : events.filter(e => e.status == "PUBLISHED" && e.deleted === false)
 
         } catch (e) {
             throw new Error(e)
@@ -96,6 +96,20 @@ module.exports = {
             return events
 
         } catch (e) {
+            throw new Error(e)
+        }
+
+    },
+
+    deleteEvent: async (eventId) => {
+
+        if(!eventId || !stringFieldValidation(eventId)) throw new Error("Missing or invalid event ID!")
+
+        try {
+
+            await eventModel.delete(eventId)
+
+        } catch(e) {
             throw new Error(e)
         }
 

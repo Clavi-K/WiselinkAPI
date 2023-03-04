@@ -28,7 +28,8 @@ module.exports = {
                 firstName: createdUser.firstName,
                 lastName: createdUser.lastName,
                 email: createdUser.email,
-                role: createdUser.role
+                role: createdUser.role,
+                events: createdUser.events
             }
             const accessToken = generateAcessToken(resultUser)
 
@@ -59,7 +60,8 @@ module.exports = {
                     firstName: returnedUser.firstName,
                     lastName: returnedUser.lastName,
                     email: returnedUser.email,
-                    role: returnedUser.role
+                    role: returnedUser.role,
+                    events: returnedUser.events
                 }
                 const accessToken = generateAcessToken(user)
 
@@ -77,7 +79,7 @@ module.exports = {
     addEvent: async (userId, eventId) => {
 
         if (!userId || !stringFieldValidation(userId)) throw new Error("Missing or invalid user ID!")
-        if (!eventId || !stringFieldValidation(eventId)) throw new Error("Missing or invalid user ID!")
+        if (!eventId || !stringFieldValidation(eventId)) throw new Error("Missing or invalid event ID!")
 
         try {
 

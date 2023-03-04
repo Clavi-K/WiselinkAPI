@@ -19,9 +19,11 @@ const router = Router()
 router.post("/", auth, adminAuth, controller.post)
 router.post("/eventFilter", auth, controller.eventFilter)
 
+router.delete("/", auth, adminAuth, controller.delete)
+
 router.put("/", auth, adminAuth, controller.update)
 
-router.get("/", auth, controller.get) 
+router.get("/", auth, controller.get)
 router.get("/getByUser/:status", auth, controller.getByUser)
 
 /* ---------- */
