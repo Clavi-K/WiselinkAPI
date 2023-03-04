@@ -29,7 +29,7 @@ module.exports = {
         const { email, password } = req.body
 
         try {
-
+            
             const result = await service.login(email, password)
             return res.status(200).send((result))
 
