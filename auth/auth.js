@@ -8,7 +8,7 @@ const config = require("../config/config")
 /* ----- AUTH MIDDLEWARE EXPORT ----- */
 
 module.exports = (req,res,next) => {
-
+    
     const accessToken = req.headers["authorization"]
     if(!accessToken) return res.status(403).send({error: "Access denied"})
 

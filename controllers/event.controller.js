@@ -84,6 +84,21 @@ module.exports = {
             return res.status(500).send({ error: e.message || e })
         }
 
+    },
+
+    delete: async (req, res) => {
+
+        const { eventId } = req.body
+
+        try {
+
+            await service.deleteEvent(eventId)
+            return res.status(200).send({ msg: "Event successfully deleted!" })
+
+        } catch(e) {
+            return res.status(500).send({ error: e.message || e })
+        }
+
     }
 
 }
